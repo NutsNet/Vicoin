@@ -1,0 +1,2 @@
+# Vicoin
+Cryptocurrency
