@@ -1,27 +1,36 @@
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class Blockchain extends Thread {
-	int blochchainId;
-	ArrayList<String> blockchainDatas;
+public class Blockchain {
+	int blochainBlockId = 0;
+	String blochainBlockHash = "0000000000000000000000000000000000000000000000000000000000000000";
 	
-	
-	public Blockchain(int id, ArrayList<String> datas) throws NoSuchAlgorithmException {
-		blochchainId = id;
-		blockchainDatas = datas;
+	public Blockchain() {
+		
 	}
 	
-	public void run() {
-		Block block= null;
-		String hash = "0000000000000000000000000000000000000000000000000000000000000000";
+	public void launch() {
+		TimerTask repeatedTask = new TimerTask() {
+		    public void run() {
+		    	try {
+					blockchainCheckData();
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				}
+		    }
+		};
 		
-		for (int i=0; i<blockchainDatas.size(); i++) {
-			try {
-				block = new Block(blochchainId, i+1, hash, blockchainDatas.get(i));
-				hash = block.blockCurrentHash;
-			} catch (NoSuchAlgorithmException e) {
-				e.printStackTrace();
-			}
+		Timer timer = new Timer("Timer");
+		timer.scheduleAtFixedRate(repeatedTask, 0, 100);
+	}
+	
+	private void blockchainCheckData() throws NoSuchAlgorithmException {
+		if (Global.globalBlockchainData.size() > 0) {
+			Block block = new Block(blochainBlockId, blochainBlockHash, Global.globalBlockchainData.get(0));
+			blochainBlockHash = block.blockCurrentHash;
+			Global.globalBlockchainData.remove(0);
+			blochainBlockId++;
 		}
 	}
 }

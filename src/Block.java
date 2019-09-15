@@ -4,8 +4,6 @@ import java.util.Date;
 public class Block {
 	private String blockData;
 	
-	private int blockChainId;
-	
 	public String blockCurrentHash;
 	private String blockPreviousBlockHash;
 	
@@ -15,20 +13,16 @@ public class Block {
 	
 	public int blockNum = 0;
 	
-	public Block(int blockchainId, int num, String previousBlockHash, String data) throws NoSuchAlgorithmException {
+	public Block(int num, String previousBlockHash, String data) throws NoSuchAlgorithmException {
 		blockNum = num;
 
 		blockData = data;
-		blockChainId = blockchainId;
 		
 		blockPreviousBlockHash = previousBlockHash;
 		
 		blockMine(new ACMethodComplete() {
             @Override
-            public void finished(Object result) {
-                //System.out.println(result);
-                blockPrint();
-            }
+            public void finished(Object result) { blockPrint(); }
         });
 	}
 	
@@ -59,7 +53,6 @@ public class Block {
 		if (blockNum == 1) {
 		System.out.println("##########################################################################################"); }
 		System.out.println("#");
-		System.out.println("# Blockchain id       : " + blockChainId);
 		System.out.println("# Block number        : " + blockNum);
 		System.out.println("# Block nonce         : " + blockNonce);
 		System.out.println("# Proof of work       : " + isBlockProofOfWork);
